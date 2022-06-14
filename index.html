@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-5 fs-1 text-secondary">Practice on API's</h2>
+        <div class="create-post mb-5">
+            <form action="" id="create-post-form">
+                <div class="col-lg-5 mx-auto">
+                    <div class="post-title-form">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="post-title" placeholder="Post Title">
+                        </div>
+                    </div>
+                    <div class="post-body-form">
+                        <textarea class="form-control" id="post-message" placeholder="Post Body" rows="10"></textarea>
+                    </div>
+                    <div class="post-button text-end mt-2">
+                        <button type="submit" id="submit-button" class="btn btn-primary">Create Post</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="posts-section">
+            <div class="row" id="post-wrapper">
+                
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
