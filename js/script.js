@@ -89,6 +89,3 @@ function createPost(event) {
             postWrapper.innerHTML = postHandler;
         })   
 }
-
-
-
