@@ -1,47 +1,36 @@
 let postWrapper = document.querySelector("#post-wrapper");
 let postBox = [];
 let firstPostBox = [];
+let clearPost = document.querySelector(".clear-post");
 let createPostForm = document.querySelector("#create-post-form");
 let postTitle = document.querySelector("#post-title");
 let postMessage = document.querySelector("#post-message");
 let deletePost = document.querySelector("#delete-post");
 
-function getPosts () {
+function getPosts() {
     fetch('https://jsonplaceholder.typicode.com/posts')
         .then((response) => response.json())
         .then((data) => {
-            postBox = data;
-            // console.log(postBox);
-            firstPostBox = postBox.slice(0, 9);
-            let postHandler = '';
-
-            firstPostBox.forEach(post => {
-                postHandler += `<div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-title">
-                                            <div class="index">
-                                                <p>${post.id}</p>
-                                            </div>
-                                            <p>${post.title}</p>
-                                        </div>
-                                        <div class="card-body px-0">
-                                            <p>${post.body}</p>
-                                        </div>
-                                        <div class="card-buttons mt-3 d-flex justify-content-end">
-                                            <div class="update-button">
-                                                <button type="submit" class="btn btn-success me-2">Update</button>
-                                            </div>
-                                            <div class="delete-features-button" id="delete-post">
-                                                <button type="submit" onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>    
-                                        `
+            postBox = data
+            let postHolder = '';
+            postBox.forEach(post => {
+                postHolder += `
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p>${post.id}</p>
+                                <h6 id="post-title">${post.title}</h6>
+                                <p id="post-body">${post.body}</p>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-primary">Update</button>
+                                    <button class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> `
             });
-
-            postWrapper.innerHTML = postHandler;
-        })
+            postWrapper.innerHTML = postHolder;
+        })  
 }
 
 getPosts();
@@ -64,33 +53,24 @@ function createPost(event) {
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log(postBox);
             postBox.unshift(data);
+            console.log(postBox);
             let postHandler = '';
 
             postBox.forEach(post => {
-                postHandler += `<div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-title">
-                                            <div class="index">
-                                                <p>${post.id}</p>
-                                            </div>
-                                            <p>${post.title}</p>
-                                        </div>
-                                        <div class="card-body px-0">
-                                            <p>${post.body}</p>
-                                        </div>
-                                        <div class="card-buttons mt-3 d-flex justify-content-end">
-                                            <div class="update-button">
-                                                <button type="submit" class="btn btn-success me-2">Update</button>
-                                            </div>
-                                            <div class="delete-features-button" id="delete-post">
-                                                <button type="submit" onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
+                postHandler += `<div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p>${post.id}</p>
+                                            <h6 id="post-title">${post.title}</h6>
+                                            <p id="post-body">${post.body}</p>
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-primary">Update</button>
+                                                <button onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>    
-                                        `
+                                </div>`
             });
 
             postWrapper.innerHTML = postHandler;
@@ -98,44 +78,40 @@ function createPost(event) {
 }
 
 function deleteMyPost(id) {
-    fetch('https://jsonplaceholder.typicode.com/posts' + "/" + id, {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
         method: 'DELETE',
-        headers: {
-            "Content-type": "application/json"
-        }
     })
-    .then((response) => response.json())
-    .then((data) => {
-        postBox.shift(data);
-        console.log(postBox);
+        .then((response) => response.json())
+        .then((data) => {
+            postBox = postBox.filter(post => post.id !== id);
+            console.log(postBox);
 
-        let postHandler = '';
-        postBox.forEach(post => {
-            postHandler += `<div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-title">
-                                            <div class="index">
-                                                <p>${post.id}</p>
-                                            </div>
-                                            <p>${post.title}</p>
-                                        </div>
-                                        <div class="card-body px-0">
-                                            <p>${post.body}</p>
-                                        </div>
-                                        <div class="card-buttons mt-3 d-flex justify-content-end">
-                                            <div class="update-button">
-                                                <button type="submit" class="btn btn-success me-2">Update</button>
-                                            </div>
-                                            <div class="delete-features-button" id="delete-post">
-                                                <button type="submit" onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
+            let postHandler = '';
+
+            postBox.forEach(post => {
+                postHandler += `<div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p>${post.id}</p>
+                                            <h6 id="post-title">${post.title}</h6>
+                                            <p id="post-body">${post.body}</p>
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-primary">Update</button>
+                                                <button onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>    
-                                        `
-        })
-        postWrapper.innerHTML = postHandler;
-    })
+                                </div>`
+            });
 
+            postWrapper.innerHTML = postHandler;
+        })
 }
 
+clearPost.addEventListener('submit', clearMyPost);
+
+function clearMyPost(e) {
+    e.preventDefault();
+
+    clearPost.reset();
+} 
