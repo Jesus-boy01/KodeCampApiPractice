@@ -12,24 +12,7 @@ function getPosts() {
         .then((response) => response.json())
         .then((data) => {
             postBox = data
-            let postHolder = '';
-            postBox.forEach(post => {
-                postHolder += `
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <p>${post.id}</p>
-                                <h6 id="post-title">${post.title}</h6>
-                                <p id="post-body">${post.body}</p>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn btn-primary">Update</button>
-                                    <button class="btn btn-danger">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> `
-            });
-            postWrapper.innerHTML = postHolder;
+            updateHTML(postBox);
         })  
 }
 
@@ -48,33 +31,17 @@ function createPost(event) {
             body: postMessage.value
         }),
         headers: {
-            'Content-type': 'application/json'
+            "Content-type": "application/json"
         }
     })
         .then((response) => response.json())
         .then((data) => {
-            postBox.unshift(data);
-            console.log(postBox);
-            let postHandler = '';
+            if (data.title !== "" && data.body !== "") {
+                postBox.unshift(data);
+            } 
 
-            postBox.forEach(post => {
-                postHandler += `<div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <p>${post.id}</p>
-                                            <h6 id="post-title">${post.title}</h6>
-                                            <p id="post-body">${post.body}</p>
-                                            <div class="d-flex justify-content-between">
-                                                <button class="btn btn-primary">Update</button>
-                                                <button onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`
-            });
-
-            postWrapper.innerHTML = postHandler;
-        })   
+            updateHTML(postBox);
+        })
 }
 
 function deleteMyPost(id) {
@@ -84,28 +51,71 @@ function deleteMyPost(id) {
         .then((response) => response.json())
         .then((data) => {
             postBox = postBox.filter(post => post.id !== id);
-            console.log(postBox);
 
-            let postHandler = '';
-
-            postBox.forEach(post => {
-                postHandler += `<div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <p>${post.id}</p>
-                                            <h6 id="post-title">${post.title}</h6>
-                                            <p id="post-body">${post.body}</p>
-                                            <div class="d-flex justify-content-between">
-                                                <button class="btn btn-primary">Update</button>
-                                                <button onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`
-            });
-
-            postWrapper.innerHTML = postHandler;
+            updateHTML(postBox);
         })
+}
+
+function updateMyPost(id) {
+    console.log(id);
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            userId: 3,
+            title: postTitle.value,
+            body: postMessage.value
+        }),
+        headers: {
+            "Content-type": "application/json"
+        }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        let postTitles = document.querySelectorAll(".post-title");
+        let postMessages = document.querySelectorAll(".post-body");
+
+        console.log(postTitles);
+
+        postTitles.forEach((postTitle, index) => {
+            if (index + 1 === id) {
+                if (data.title !== "") {
+                    postTitle.innerHTML = data.title;
+                }
+            }
+        })
+
+        postMessages.forEach((postMessage, index) => {
+            if (index + 1 === id) {
+                if (data.body !== "") {
+                    postMessage.innerHTML = data.body;
+                }
+            }
+        })
+    })
+}
+
+function updateHTML (array) {
+    let postHandler = '';
+
+    array.forEach(post => {
+        postHandler += `<div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <p>${post.id}</p>
+                                    <h6 class="post-title">${post.title}</h6>
+                                    <p class="post-body">${post.body}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <button onclick="updateMyPost(${post.id})" class="btn btn-primary">Update</button>
+                                        <button onclick="viewMyPost(${post.id})" class="btn btn-success">View</button>
+                                        <button onclick="deleteMyPost(${post.id})" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+    });
+
+    postWrapper.innerHTML = postHandler;
 }
 
 clearPost.addEventListener('submit', clearMyPost);
