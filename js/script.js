@@ -95,6 +95,16 @@ function updateMyPost(id) {
     })
 }
 
+function viewMyPost(id) {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            localStorage.setItem('viewedPost', JSON.stringify(data));
+            window.location.href = 'single-post.html';
+        })
+}
+
 function updateHTML (array) {
     let postHandler = '';
 
