@@ -49,7 +49,7 @@ function deleteMyPost(id) {
         method: 'DELETE',
     })
         .then((response) => response.json())
-        .then((data) => {
+        .then(() => {
             postBox = postBox.filter(post => post.id !== id);
 
             updateHTML(postBox);
