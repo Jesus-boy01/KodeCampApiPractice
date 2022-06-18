@@ -12,6 +12,8 @@ function getPosts() {
         .then((response) => response.json())
         .then((data) => {
             postBox = data
+            postBox = postBox.slice(0, 12);
+            console.log(postBox);
             updateHTML(postBox);
         })  
 }
