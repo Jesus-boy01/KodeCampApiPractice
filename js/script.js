@@ -13,7 +13,6 @@ function getPosts() {
         .then((data) => {
             postBox = data
             postBox = postBox.slice(0, 12);
-            console.log(postBox);
             updateHTML(postBox);
         })  
 }
