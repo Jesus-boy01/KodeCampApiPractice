@@ -57,7 +57,6 @@ function deleteMyPost(id) {
 }
 
 function updateMyPost(id) {
-    console.log(id);
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -74,8 +73,6 @@ function updateMyPost(id) {
         console.log(data);
         let postTitles = document.querySelectorAll(".post-title");
         let postMessages = document.querySelectorAll(".post-body");
-
-        console.log(postTitles);
 
         postTitles.forEach((postTitle, index) => {
             if (index + 1 === id) {
